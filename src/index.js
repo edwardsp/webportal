@@ -1,18 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/core/styles';
-import App from './Components/App/App';
-import theme from './theme';
+import {BrowserRouter} from 'react-router-dom';
+//import CssBaseline from '@material-ui/core/CssBaseline';
+//import { ThemeProvider } from '@material-ui/core/styles';
+//import App from './Components/App/App';
+import Dashboard from './Views/Dashboard/Dashboard';
+//import theme from './theme';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <App />
-    </ThemeProvider>
+    <BrowserRouter>
+      <Dashboard />
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
