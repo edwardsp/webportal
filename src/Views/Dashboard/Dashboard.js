@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { createMuiTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
+import { unstable_createMuiStrictModeTheme as createMuiTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
@@ -16,7 +16,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="">
-        AzureHPC OnDemand
+        Microsoft
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}

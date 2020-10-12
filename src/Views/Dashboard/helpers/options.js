@@ -1,7 +1,11 @@
 import React from 'react';
 import Content from 'Components/Content';
 import UserView from 'Views/User/UserView';
+import TestEditor from 'Views/Playground/TestEditor';
+import EditableTable from 'Views/Playground/EditableTable';
 import PeopleIcon from '@material-ui/icons/People';
+import EditIcon from '@material-ui/icons/Edit';
+import TableIcon from '@material-ui/icons/TableChart';
 
 export const dashboardRoutes = [
   {path: '/dashboard', component: Content},
@@ -12,7 +16,8 @@ export const dashboardRoutes = [
   {path: '/users/foo', component: UserView},
   {path: '/users/bar', component: UserView},
 
-  {path: '/xyz', component: UserView},
+  {path: '/playground/editor', component: TestEditor},
+  {path: '/playground/editabletable', component: EditableTable},
 
   {path: '', to: '/dashboard', exact: true, redirect: true},
 ];
@@ -26,9 +31,10 @@ export const navigatorLinks = [
     ],
   },
   {
-    label: 'Something else...',
+    label: 'Playground',
     children: [
-        {path: '/xyz', label: 'XYZ', icon: <PeopleIcon/>},
+      {path: '/playground/editor', label: 'Editor', icon: <EditIcon/>},
+      {path: '/playground/editabletable', label: 'Editable Table', icon: <TableIcon/>},
     ],
   },
 ];
@@ -44,9 +50,12 @@ export const headerLinks = [
     children: []
   },
   {
-    group: '/xyz',
-    label: 'XYZ',
-    children: []
+    group: '/playground',
+    label: 'Playground',
+    children: [
+      {path: '/playground/editor', label: 'Test Editor'},
+      {path: '/playground/editabletable', label: 'Editable Table'},
+    ]
   },
   {
     group: '/users',
