@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import PasswordField from 'Components/PasswordField';
-import PasswordInput from 'Components/PasswordInput';
 
 import MaterialTable from 'material-table';
 
@@ -60,7 +58,7 @@ const styles = (theme) => ({
   block: {
     display: 'block',
   },
-  addUser: {
+  addQueue: {
     marginRight: theme.spacing(1),
   },
   contentWrapper: {
@@ -68,42 +66,43 @@ const styles = (theme) => ({
   },
 });
 
-function UserView(props) {
+function SchedulerView(props) {
   const { classes } = props;
 
   const { useState, useEffect } = React;
-
+/*
+  partitions.conf 
+  PartitionName=compute Nodes=compute-[0001-0040] Default=NO OverSubscribe=YES DefMemPerCPU=10240 MaxTime=INFINITE State=UP
+  PartitionName=interactive Nodes=interactive-[0001-0002] Default=NO OverSubscribe=YES DefMemPerCPU=10240 MaxTime=INFINITE State=UP
+  PartitionName=viz Nodes=viz-[0001-0002] Default=NO OverSubscribe=YES DefMemPerCPU=10240 MaxTime=INFINITE State=UP
+  PartitionName=viz3d Nodes=viz3d-[0001-0002] Default=NO OverSubscribe=YES DefMemPerCPU=10240 MaxTime=INFINITE State=UP
+  nodes.conf 
+  NodeName=compute-[0001-0040] CPUs=120 Sockets=30 CoresPerSocket=4 ThreadsPerCore=1 RealMemory=458752 MemSpecLimit=5120 Feature=HB120rs_v2 State=CLOUD
+  NodeName=interactive-[0001-0002] CPUs=4 Sockets=1 CoresPerSocket=4 ThreadsPerCore=2 RealMemory=31744 MemSpecLimit=1587 Feature=D8s_v3 State=CLOUD
+  NodeName=viz-[0001-0002] CPUs=120 Sockets=30 CoresPerSocket=4 ThreadsPerCore=1 RealMemory=458752 MemSpecLimit=5120 Feature=HB120rs_v2 State=CLOUD
+  NodeName=viz3d-[0001-0002] CPUs=6 Sockets=1 CoresPerSocket=6 ThreadsPerCore=1 RealMemory=56320 MemSpecLimit=2816 Feature=NV6_Promo State=CLOUD
+*/
   const columns = [
-    { title: 'User ID', field: 'user_id', type: 'numeric' },
-    { title: 'Username', field: 'username' },
+    { title: 'Partition ID', field: 'partition_id', type: 'numeric' },
     { title: 'Name', field: 'name' },
-    { title: 'Surname', field: 'surname' },
-    { title: 'Password', field: 'password', type: 'string',
-      editComponent: props => (
-        <PasswordInput
-          value={props.value ? props.value : ""}
-          onChange={props.onChange}
-        />
-      ),
-      render: rowData => <PasswordField value={rowData.password} />
-    },
-    { title: 'Admin', field: 'sudo', 'type': 'boolean' },
+    { title: 'SKU', field: 'sku' },
+    { title: 'Count', field: 'count' },
   ];
 
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const resp = await axios.get('/api/users');
-      setData(resp.data.users);
+    const fetchQueues = async () => {
+      const resp = await axios.get('/api/scheduler/queues');
+      setData(resp.data.queues);
     };
-    fetchUsers();
+    fetchQueues();
   }, []);
 
   return (
     <Paper className={classes.paper}>
         <MaterialTable icons={tableIcons}
-            title="Users"
+            title="Queues"
             columns={columns}
             data={data}
             localization={{
@@ -114,7 +113,7 @@ function UserView(props) {
             editable={{
                 onRowAdd: newData =>
                 new Promise((resolve, reject) => {
-                  axios.post('/api/users', newData)
+                  axios.post('/api/scheduler/queues', newData)
                     .then(function ({resp}) {
                       setData([...data, newData]);
                       resolve();
@@ -126,7 +125,7 @@ function UserView(props) {
                 }),
                 onRowUpdate: (newData, oldData) =>
                 new Promise((resolve, reject) => {
-                  axios.put('/api/users/'+oldData.user_id, newData)
+                  axios.put('/api/scheduler/queues/'+oldData.queue_id, newData)
                   .then(function ({resp}) {
                     const dataUpdate = [...data];
                     const index = oldData.tableData.id;
@@ -142,7 +141,7 @@ function UserView(props) {
                 }),
                 onRowDelete: oldData =>
                 new Promise((resolve, reject) => {
-                    axios.delete('/api/users/'+oldData.user_id)
+                    axios.delete('/api/scheduler/queues/'+oldData.queue_id)
                     .then(function ({resp}) {
                       const dataDelete = [...data];
                       const index = oldData.tableData.id;
@@ -161,8 +160,8 @@ function UserView(props) {
   );
 }
 
-UserView.propTypes = {
+SchedulerView.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(UserView);
+export default withStyles(styles)(SchedulerView);

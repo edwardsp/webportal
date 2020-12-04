@@ -63,7 +63,7 @@ function Navigator(props) {
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
         <ListItem className={clsx(classes.firebase, classes.item, classes.itemCategory)}>
-          azhpc
+          Azure OnDemand
         </ListItem>
         <Link
           className={classes.navLink}
